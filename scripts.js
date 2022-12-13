@@ -9,11 +9,14 @@ const Gameboard = (() => {
       cell.setAttribute('id', value);
       cell.textContent = gameboard[value];
       cell.addEventListener('click', () => {
-        console.log('click');
-        if (activePlayer === 1) {
+        if (activePlayer === 1 && gameboard[value] === '') {
           cell.textContent = 'X';
-        } else {
+          gameboard[value] = 'X';
+          activePlayer = 2;
+        } else if (activePlayer === 2 && gameboard[value] === '') {
           cell.textContent = 'O';
+          gameboard[value] = 'O';
+          activePlayer = 1;
         }
       });
       container.appendChild(cell);
