@@ -1,0 +1,29 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  background-color: rgb(231, 239, 241);
+}
+
+h1 {
+  text-align: center;
+}
+
+.container {
+  width: min(600px, 90vw);
+  height: min(600px, 90vw);
+  background-color: skyblue;
+  margin: auto;
+  display: grid;
+  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+  gap: 3px;
+}
+
+.gameboard-cell {
+  background-color: lightgrey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
