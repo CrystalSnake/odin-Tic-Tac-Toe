@@ -1,4 +1,5 @@
 const container = document.querySelector('.container');
+const controlPanel = document.querySelector('.control-panel');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
 
@@ -14,9 +15,10 @@ let activePlayer = player1;
 
 const getStartButton = () => {
   const startNewGame = document.createElement('button');
+  startNewGame.classList.add('start');
   startNewGame.textContent = 'New Game';
   startNewGame.addEventListener('click', Gameboard.getGrid);
-  document.body.appendChild(startNewGame);
+  controlPanel.appendChild(startNewGame);
 };
 
 const Gameboard = (() => {

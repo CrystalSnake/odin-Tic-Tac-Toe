@@ -18,6 +18,7 @@ h1 {
   display: grid;
   grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
   gap: 3px;
+  margin-bottom: 30px;
 }
 
 .gameboard-cell {
@@ -26,4 +27,24 @@ h1 {
   justify-content: center;
   align-items: center;
   font-size: 100px;
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start {
+  width: 200px;
+  height: 60px;
+  background-color: rgb(209, 68, 12);
+  border-radius: 5px;
+  border: none;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+
+.start:hover {
+  background-color: rgb(206, 76, 24);
 }
