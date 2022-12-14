@@ -1,4 +1,5 @@
 const container = document.querySelector('.container');
+const resultsContainer = document.querySelector('.results');
 const controlPanel = document.querySelector('.control-panel');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
@@ -19,6 +20,18 @@ const getStartButton = () => {
   startNewGame.textContent = 'New Game';
   startNewGame.addEventListener('click', Gameboard.getGrid);
   controlPanel.appendChild(startNewGame);
+};
+
+const showPoints = () => {
+  resultsContainer.textContent = '';
+  let playerOnePoints = document.createElement('p');
+  playerOnePoints.classList.add('points', 'one', 'active');
+  playerOnePoints.textContent = `${player1.name} - ${player1.count}`;
+  resultsContainer.appendChild(playerOnePoints);
+  let playerTwoPoints = document.createElement('p');
+  playerTwoPoints.classList.add('points', 'two');
+  playerTwoPoints.textContent = `${player2.name} - ${player2.count}`;
+  resultsContainer.appendChild(playerTwoPoints);
 };
 
 const Gameboard = (() => {
@@ -79,6 +92,7 @@ const GameLogic = (() => {
     ) {
       gameOn = false;
       activePlayer.count++;
+      showPoints();
       console.log(`${activePlayer.name} Win! Count ${activePlayer.count}`);
     } else {
       let emptyCells = gameboard.filter((cell) => cell != 'X' && cell != 'O');
@@ -89,10 +103,16 @@ const GameLogic = (() => {
     }
   };
   const changePlayer = () => {
+    const playerOneCard = document.querySelector('.one');
+    const playerTwoCard = document.querySelector('.two');
     if (activePlayer === player1) {
       activePlayer = player2;
+      playerOneCard.classList.remove('active');
+      playerTwoCard.classList.add('active');
     } else {
       activePlayer = player1;
+      playerOneCard.classList.add('active');
+      playerTwoCard.classList.remove('active');
     }
   };
   return { winCheck, changePlayer };
@@ -100,3 +120,4 @@ const GameLogic = (() => {
 
 Gameboard.getGrid();
 getStartButton();
+showPoints();

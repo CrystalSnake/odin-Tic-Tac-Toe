@@ -29,6 +29,22 @@ h1 {
   font-size: 100px;
 }
 
+.results {
+  display: flex;
+  justify-content: space-around;
+}
+
+.results p {
+  font-size: 30px;
+  margin-top: 0;
+  padding: 0 10px;
+}
+
+.results p.active {
+  border: 3px solid green;
+  border-radius: 5px;
+}
+
 .control-panel {
   display: flex;
   flex-direction: column;
