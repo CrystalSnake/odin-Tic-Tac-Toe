@@ -22,6 +22,18 @@ const getStartButton = () => {
   controlPanel.appendChild(startNewGame);
 };
 
+const getReset = () => {
+  const resetButton = document.createElement('button');
+  resetButton.classList.add('reset');
+  resetButton.textContent = 'Reset score';
+  resetButton.addEventListener('click', () => {
+    player1.count = 0;
+    player2.count = 0;
+    showPoints();
+  });
+  controlPanel.appendChild(resetButton);
+};
+
 const showPoints = () => {
   resultsContainer.textContent = '';
   let playerOnePoints = document.createElement('p');
@@ -120,4 +132,5 @@ const GameLogic = (() => {
 
 Gameboard.getGrid();
 getStartButton();
+getReset();
 showPoints();
