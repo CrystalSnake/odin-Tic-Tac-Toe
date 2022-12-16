@@ -1,50 +1,98 @@
 const container = document.querySelector('.container');
 const resultsContainer = document.querySelector('.results');
 const controlPanel = document.querySelector('.control-panel');
+const applyButton = document.querySelector('#apply-settings');
+const markerChanger = document.querySelector('#change-marker');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
 
-const playerFactory = (name, mark) => {
+const playerFactory = (name, mark, active) => {
   let count = 0;
-  return { mark, name, count };
+
+  return { mark, name, count, active };
 };
 
-const player1 = playerFactory('one', 'X');
-const player2 = playerFactory('two', 'O');
+const player1 = playerFactory('Player 1', 'X', true);
+const player2 = playerFactory('Player 2', 'O', false);
 
 let activePlayer = player1;
 
-const getStartButton = () => {
-  const startNewGame = document.createElement('button');
-  startNewGame.classList.add('start');
-  startNewGame.textContent = 'New Game';
-  startNewGame.addEventListener('click', Gameboard.getGrid);
-  controlPanel.appendChild(startNewGame);
-};
+function stopDefAction(evt) {
+  evt.preventDefault();
+}
 
-const getReset = () => {
-  const resetButton = document.createElement('button');
-  resetButton.classList.add('reset');
-  resetButton.textContent = 'Reset score';
-  resetButton.addEventListener('click', () => {
-    player1.count = 0;
-    player2.count = 0;
-    showPoints();
-  });
-  controlPanel.appendChild(resetButton);
-};
+applyButton.addEventListener('click', stopDefAction, false);
+applyButton.addEventListener('click', () => {
+  console.log('click');
+  let playerOneNameInput = document.querySelector('#player-1').value;
+  let playerTwoNameInput = document.querySelector('#player-2').value;
+  if (playerOneNameInput) {
+    player1.name = playerOneNameInput;
+  }
+  if (playerTwoNameInput) {
+    player2.name = playerTwoNameInput;
+  }
+  ControlPanel.showPlayerCard([player1, player2]);
+  Gameboard.getGrid();
+});
 
-const showPoints = () => {
-  resultsContainer.textContent = '';
-  let playerOnePoints = document.createElement('p');
-  playerOnePoints.classList.add('points', 'one', 'active');
-  playerOnePoints.textContent = `${player1.name} - ${player1.count}`;
-  resultsContainer.appendChild(playerOnePoints);
-  let playerTwoPoints = document.createElement('p');
-  playerTwoPoints.classList.add('points', 'two');
-  playerTwoPoints.textContent = `${player2.name} - ${player2.count}`;
-  resultsContainer.appendChild(playerTwoPoints);
-};
+markerChanger.addEventListener('click', () => {
+  if (player1.mark === 'X') {
+    player1.mark = 'O';
+    player2.mark = 'X';
+  } else {
+    player1.mark = 'X';
+    player2.mark = 'O';
+  }
+  ControlPanel.showPlayerCard([player1, player2]);
+  Gameboard.getGrid();
+});
+
+const ControlPanel = (() => {
+  const getStartButton = () => {
+    const startNewGame = document.createElement('button');
+    startNewGame.classList.add('start');
+    startNewGame.textContent = 'New Game';
+    startNewGame.addEventListener('click', Gameboard.getGrid);
+    controlPanel.appendChild(startNewGame);
+  };
+
+  const getReset = () => {
+    const resetButton = document.createElement('button');
+    resetButton.classList.add('reset');
+    resetButton.textContent = 'Reset score';
+    resetButton.addEventListener('click', () => {
+      player1.count = 0;
+      player2.count = 0;
+      ControlPanel.showPlayerCard([player1, player2]);
+    });
+    controlPanel.appendChild(resetButton);
+  };
+
+  const showPlayerCard = (players) => {
+    resultsContainer.textContent = '';
+    for (pl of players) {
+      const playerCard = document.createElement('div');
+      if (pl.active) {
+        playerCard.classList.add('player-card', 'active');
+      } else {
+        playerCard.classList.add('player-card');
+      }
+      let playerName = document.createElement('p');
+      playerName.textContent = pl.name;
+      let playerMark = document.createElement('p');
+      playerMark.textContent = `Marker: ${pl.mark}`;
+      let playerPoints = document.createElement('p');
+      playerPoints.textContent = pl.count;
+      playerCard.appendChild(playerName);
+      playerCard.appendChild(playerMark);
+      playerCard.appendChild(playerPoints);
+      resultsContainer.appendChild(playerCard);
+    }
+  };
+
+  return { getStartButton, getReset, showPlayerCard };
+})();
 
 const Gameboard = (() => {
   const _createCell = (i) => {
@@ -104,7 +152,7 @@ const GameLogic = (() => {
     ) {
       gameOn = false;
       activePlayer.count++;
-      showPoints();
+      ControlPanel.showPlayerCard([player1, player2]);
       console.log(`${activePlayer.name} Win! Count ${activePlayer.count}`);
     } else {
       let emptyCells = gameboard.filter((cell) => cell != 'X' && cell != 'O');
@@ -115,22 +163,21 @@ const GameLogic = (() => {
     }
   };
   const changePlayer = () => {
-    const playerOneCard = document.querySelector('.one');
-    const playerTwoCard = document.querySelector('.two');
     if (activePlayer === player1) {
+      player1.active = false;
+      player2.active = true;
       activePlayer = player2;
-      playerOneCard.classList.remove('active');
-      playerTwoCard.classList.add('active');
     } else {
       activePlayer = player1;
-      playerOneCard.classList.add('active');
-      playerTwoCard.classList.remove('active');
+      player1.active = true;
+      player2.active = false;
     }
+    ControlPanel.showPlayerCard([player1, player2]);
   };
   return { winCheck, changePlayer };
 })();
 
 Gameboard.getGrid();
-getStartButton();
-getReset();
-showPoints();
+ControlPanel.getStartButton();
+ControlPanel.getReset();
+ControlPanel.showPlayerCard([player1, player2]);

@@ -15,7 +15,56 @@
     <main>
       <div class="container"></div>
       <div class="results"></div>
-      <div class="control-panel"></div>
+      <div class="control-panel">
+        <div class="settings-container">
+          <h2>Settings</h2>
+          <button type="button" id="change-marker">Change marker</button>
+          <form action="#" id="settings" method="post">
+            <fieldset>
+              <legend>
+                <h3>Player 1</h3>
+              </legend>
+              <div class="name-input">
+                <label for="player-1-name">Player 1:</label>
+                <input type="text" name="player-1" id="player-1" />
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>
+                <h3>Player 2</h3>
+              </legend>
+              <div class="player-type">
+                <input
+                  type="radio"
+                  id="player-human"
+                  name="player-type"
+                  value="human"
+                  checked
+                />
+                <label for="player-type">Human</label>
+
+                <input
+                  type="radio"
+                  id="player-bot"
+                  name="player-type"
+                  value="bot"
+                />
+                <label for="player-type">Bot</label>
+              </div>
+
+              <div class="name-input">
+                <label for="player-2-name">Player 2:</label>
+                <input type="text" name="player-2" id="player-2" />
+              </div>
+            </fieldset>
+
+            <button type="submit" form="settings" id="apply-settings">
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
     </main>
   </body>
 </html>
