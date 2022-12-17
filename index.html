@@ -18,14 +18,17 @@
       <div class="control-panel">
         <div class="settings-container">
           <h2>Settings</h2>
-          <button type="button" id="change-marker">Change marker</button>
+          <div class="settings-buttons">
+            <button type="button" id="change-marker">Change marker</button>
+          </div>
+
           <form action="#" id="settings" method="post">
             <fieldset>
               <legend>
                 <h3>Player 1</h3>
               </legend>
               <div class="name-input">
-                <label for="player-1-name">Player 1:</label>
+                <label for="player-1-name">Name:</label>
                 <input type="text" name="player-1" id="player-1" />
               </div>
             </fieldset>
@@ -34,6 +37,10 @@
               <legend>
                 <h3>Player 2</h3>
               </legend>
+              <div class="name-input">
+                <label for="player-2-name">Name:</label>
+                <input type="text" name="player-2" id="player-2" />
+              </div>
               <div class="player-type">
                 <input
                   type="radio"
@@ -42,7 +49,7 @@
                   value="human"
                   checked
                 />
-                <label for="player-type">Human</label>
+                <label for="player-human">Human</label>
 
                 <input
                   type="radio"
@@ -50,12 +57,7 @@
                   name="player-type"
                   value="bot"
                 />
-                <label for="player-type">Bot</label>
-              </div>
-
-              <div class="name-input">
-                <label for="player-2-name">Player 2:</label>
-                <input type="text" name="player-2" id="player-2" />
+                <label for="player-bot">Bot</label>
               </div>
             </fieldset>
 

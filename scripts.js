@@ -2,6 +2,7 @@ const container = document.querySelector('.container');
 const resultsContainer = document.querySelector('.results');
 const controlPanel = document.querySelector('.control-panel');
 const applyButton = document.querySelector('#apply-settings');
+const settingsButtons = document.querySelector('.settings-buttons');
 const markerChanger = document.querySelector('#change-marker');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
@@ -66,7 +67,7 @@ const ControlPanel = (() => {
       player2.count = 0;
       ControlPanel.showPlayerCard([player1, player2]);
     });
-    controlPanel.appendChild(resetButton);
+    settingsButtons.appendChild(resetButton);
   };
 
   const showPlayerCard = (players) => {

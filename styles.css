@@ -1,9 +1,10 @@
 html {
   font-family: sans-serif;
+  font-size: 20px;
 }
 
 body {
-  background-color: rgb(231, 239, 241);
+  background-color: rgb(249, 255, 249);
 }
 
 h1 {
@@ -13,7 +14,7 @@ h1 {
 .container {
   width: min(600px, 90vw);
   height: min(600px, 90vw);
-  background-color: skyblue;
+  background: rgb(76, 138, 68);
   margin: auto;
   display: grid;
   grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
@@ -22,7 +23,7 @@ h1 {
 }
 
 .gameboard-cell {
-  background-color: lightgrey;
+  background-color: rgb(240, 250, 240);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +32,9 @@ h1 {
 
 .results {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  max-width: 600px;
+  margin: auto;
 }
 
 .results p {
@@ -60,8 +63,7 @@ h1 {
   align-items: start;
 }
 
-.start,
-.reset {
+button {
   width: 200px;
   height: 60px;
   margin: 10px;
@@ -69,20 +71,75 @@ h1 {
   border: none;
   text-transform: uppercase;
   font-size: 20px;
+  background: rgba(76, 138, 68, 0.9);
+  opacity: 0.9;
+}
+
+button:hover {
+  background: rgb(76, 138, 68);
 }
 
 .start {
   background-color: rgb(209, 68, 12);
 }
 
-.start:hover {
-  background-color: rgb(206, 76, 24);
-}
-
 .reset {
   background-color: rgb(209, 12, 12);
 }
 
-.reset:hover {
-  background-color: rgb(206, 30, 24);
+form {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 600px;
+}
+
+input {
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid rgba(17, 122, 3, 0.5);
+}
+
+fieldset {
+  border-radius: 5px;
+  border: 1px solid rgb(17, 122, 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+legend {
+  color: rgb(11, 82, 1);
+}
+
+.name-input {
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+label {
+  text-transform: uppercase;
+  padding-right: 10px;
+}
+
+.player-type input {
+  display: none;
+}
+
+.player-type label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px 15px;
+  line-height: 34px;
+  border: 1px solid rgba(17, 122, 3, 0.5);
+  border-radius: 6px;
+  user-select: none;
+}
+
+.player-type input[type='radio']:checked + label {
+  background: rgba(76, 138, 68, 0.9);
+}
+
+.player-type label:hover {
+  background: rgb(76, 138, 68);
 }
