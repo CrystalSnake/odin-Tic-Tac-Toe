@@ -131,10 +131,10 @@ const GameLogic = (() => {
     return Math.floor(Math.random() * max);
   }
 
-  const _showMessage = () => {
+  const _showMessage = (content) => {
     const message = document.createElement('div');
     message.classList.add('message');
-    message.textContent = `${activePlayer.name} Win!`;
+    message.textContent = content;
     document.body.appendChild(message);
   };
 
@@ -169,10 +169,10 @@ const GameLogic = (() => {
       gameOn = false;
       activePlayer.count++;
       ControlPanel.showPlayerCard([player1, player2]);
-      _showMessage();
+      _showMessage(`${activePlayer.name} Win!`);
     } else {
       if (emptyCells.length === 0) {
-        console.log('Draw!');
+        _showMessage('Draw!');
         gameOn = false;
       }
     }
@@ -198,8 +198,6 @@ const GameLogic = (() => {
           freeCells.push(cell);
         }
       }
-      console.log(freeCells);
-      console.log(freeCells[getRandomInt(freeCells.length)]);
       if (freeCells && gameOn) {
         gameboard[freeCells[getRandomInt(freeCells.length)]] =
           activePlayer.mark;
@@ -221,4 +219,5 @@ startNewGame.addEventListener('click', () => {
   ControlPanel.showPlayerCard([player1, player2]);
   gameOn = true;
   document.body.removeChild(document.body.lastChild);
+  GameLogic.botTurn();
 });
