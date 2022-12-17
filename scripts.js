@@ -1,4 +1,5 @@
 const container = document.querySelector('.container');
+const startNewGame = document.querySelector('.start');
 const resultsContainer = document.querySelector('.results');
 const controlPanel = document.querySelector('.control-panel');
 const applyButton = document.querySelector('#apply-settings');
@@ -50,14 +51,6 @@ markerChanger.addEventListener('click', () => {
 });
 
 const ControlPanel = (() => {
-  const getStartButton = () => {
-    const startNewGame = document.createElement('button');
-    startNewGame.classList.add('start');
-    startNewGame.textContent = 'New Game';
-    startNewGame.addEventListener('click', Gameboard.getGrid);
-    controlPanel.appendChild(startNewGame);
-  };
-
   const getReset = () => {
     const resetButton = document.createElement('button');
     resetButton.classList.add('reset');
@@ -92,7 +85,7 @@ const ControlPanel = (() => {
     }
   };
 
-  return { getStartButton, getReset, showPlayerCard };
+  return { getReset, showPlayerCard };
 })();
 
 const Gameboard = (() => {
@@ -117,7 +110,6 @@ const Gameboard = (() => {
     for (let i in gameboard) {
       container.appendChild(_createCell(i));
     }
-    gameOn = true;
   };
 
   return { getGrid };
@@ -179,6 +171,12 @@ const GameLogic = (() => {
 })();
 
 Gameboard.getGrid();
-ControlPanel.getStartButton();
+
 ControlPanel.getReset();
 ControlPanel.showPlayerCard([player1, player2]);
+
+startNewGame.addEventListener('click', () => {
+  Gameboard.getGrid();
+  ControlPanel.showPlayerCard([player1, player2]);
+  gameOn = true;
+});
