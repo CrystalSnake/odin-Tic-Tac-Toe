@@ -36,19 +36,28 @@ h1 {
 
 .results p {
   font-size: 30px;
-  margin-top: 0;
+  margin: 5px 0;
   padding: 0 10px;
 }
 
-.results .active {
+.player-card.active {
   border: 3px solid green;
+  background: rgba(17, 122, 3, 0.5);
+}
+
+.player-card {
   border-radius: 5px;
+  background: rgba(121, 121, 121, 0.5);
+  text-align: center;
+  padding: 10px 20px;
 }
 
 .control-panel {
+  max-width: 600px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
 }
 
 .start,
