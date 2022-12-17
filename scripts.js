@@ -8,14 +8,14 @@ const markerChanger = document.querySelector('#change-marker');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
 
-const playerFactory = (name, mark, active) => {
+const playerFactory = (name, mark, type, active) => {
   let count = 0;
 
-  return { mark, name, count, active };
+  return { mark, name, count, type, active };
 };
 
-const player1 = playerFactory('Player 1', 'X', true);
-const player2 = playerFactory('Player 2', 'O', false);
+const player1 = playerFactory('Player 1', 'X', 'human', true);
+const player2 = playerFactory('Player 2', 'O', 'human', false);
 
 let activePlayer = player1;
 
@@ -25,14 +25,20 @@ function stopDefAction(evt) {
 
 applyButton.addEventListener('click', stopDefAction, false);
 applyButton.addEventListener('click', () => {
-  console.log('click');
   let playerOneNameInput = document.querySelector('#player-1').value;
   let playerTwoNameInput = document.querySelector('#player-2').value;
+  let playerHuman = document.querySelector('#player-human').checked;
+  let playerBot = document.querySelector('#player-bot').checked;
   if (playerOneNameInput) {
     player1.name = playerOneNameInput;
   }
   if (playerTwoNameInput) {
     player2.name = playerTwoNameInput;
+  }
+  if (playerHuman) {
+    player2.type = 'Human';
+  } else if (playerBot) {
+    player2.type = 'Bot';
   }
   ControlPanel.showPlayerCard([player1, player2]);
   Gameboard.getGrid();
@@ -95,27 +101,36 @@ const Gameboard = (() => {
     cell.textContent = gameboard[i];
     cell.addEventListener('click', () => {
       if (gameboard[i] === '' && gameOn) {
-        cell.textContent = activePlayer.mark;
         gameboard[i] = activePlayer.mark;
+        renderGrid();
         GameLogic.winCheck();
         GameLogic.changePlayer();
       }
+      GameLogic.botTurn();
     });
     return cell;
   };
 
-  const getGrid = () => {
-    gameboard = ['', '', '', '', '', '', '', '', ''];
+  const renderGrid = () => {
     container.textContent = '';
     for (let i in gameboard) {
       container.appendChild(_createCell(i));
     }
   };
 
-  return { getGrid };
+  const getGrid = () => {
+    gameboard = ['', '', '', '', '', '', '', '', ''];
+    renderGrid();
+  };
+
+  return { getGrid, renderGrid };
 })();
 
 const GameLogic = (() => {
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
   const _showMessage = () => {
     const message = document.createElement('div');
     message.classList.add('message');
@@ -124,6 +139,7 @@ const GameLogic = (() => {
   };
 
   const winCheck = () => {
+    let emptyCells = gameboard.filter((cell) => cell != 'X' && cell != 'O');
     if (
       (gameboard[0] === activePlayer.mark &&
         gameboard[1] === activePlayer.mark &&
@@ -155,7 +171,6 @@ const GameLogic = (() => {
       ControlPanel.showPlayerCard([player1, player2]);
       _showMessage();
     } else {
-      let emptyCells = gameboard.filter((cell) => cell != 'X' && cell != 'O');
       if (emptyCells.length === 0) {
         console.log('Draw!');
         gameOn = false;
@@ -174,7 +189,27 @@ const GameLogic = (() => {
     }
     ControlPanel.showPlayerCard([player1, player2]);
   };
-  return { winCheck, changePlayer };
+
+  const botTurn = () => {
+    if (activePlayer.type === 'Bot') {
+      const freeCells = [];
+      for (cell in gameboard) {
+        if (gameboard[cell] === '') {
+          freeCells.push(cell);
+        }
+      }
+      console.log(freeCells);
+      console.log(freeCells[getRandomInt(freeCells.length)]);
+      if (freeCells && gameOn) {
+        gameboard[freeCells[getRandomInt(freeCells.length)]] =
+          activePlayer.mark;
+        Gameboard.renderGrid();
+        winCheck();
+        changePlayer();
+      }
+    }
+  };
+  return { winCheck, changePlayer, botTurn };
 })();
 
 Gameboard.getGrid();
