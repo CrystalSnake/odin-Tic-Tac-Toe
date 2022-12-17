@@ -116,6 +116,13 @@ const Gameboard = (() => {
 })();
 
 const GameLogic = (() => {
+  const _showMessage = () => {
+    const message = document.createElement('div');
+    message.classList.add('message');
+    message.textContent = `${activePlayer.name} Win!`;
+    document.body.appendChild(message);
+  };
+
   const winCheck = () => {
     if (
       (gameboard[0] === activePlayer.mark &&
@@ -146,7 +153,7 @@ const GameLogic = (() => {
       gameOn = false;
       activePlayer.count++;
       ControlPanel.showPlayerCard([player1, player2]);
-      console.log(`${activePlayer.name} Win! Count ${activePlayer.count}`);
+      _showMessage();
     } else {
       let emptyCells = gameboard.filter((cell) => cell != 'X' && cell != 'O');
       if (emptyCells.length === 0) {
@@ -171,7 +178,6 @@ const GameLogic = (() => {
 })();
 
 Gameboard.getGrid();
-
 ControlPanel.getReset();
 ControlPanel.showPlayerCard([player1, player2]);
 
@@ -179,4 +185,5 @@ startNewGame.addEventListener('click', () => {
   Gameboard.getGrid();
   ControlPanel.showPlayerCard([player1, player2]);
   gameOn = true;
+  document.body.removeChild(document.body.lastChild);
 });
