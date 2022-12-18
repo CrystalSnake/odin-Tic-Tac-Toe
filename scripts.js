@@ -5,6 +5,7 @@ const controlPanel = document.querySelector('.control-panel');
 const applyButton = document.querySelector('#apply-settings');
 const settingsButtons = document.querySelector('.settings-buttons');
 const markerChanger = document.querySelector('#change-marker');
+const resetButton = document.querySelector('#reset');
 let gameboard = ['', '', '', '', '', '', '', '', ''];
 let gameOn = true;
 
@@ -23,76 +24,27 @@ function stopDefAction(evt) {
   evt.preventDefault();
 }
 
-applyButton.addEventListener('click', stopDefAction, false);
-applyButton.addEventListener('click', () => {
-  let playerOneNameInput = document.querySelector('#player-1').value;
-  let playerTwoNameInput = document.querySelector('#player-2').value;
-  let playerHuman = document.querySelector('#player-human').checked;
-  let playerBot = document.querySelector('#player-bot').checked;
-  if (playerOneNameInput) {
-    player1.name = playerOneNameInput;
-  }
-  if (playerTwoNameInput) {
-    player2.name = playerTwoNameInput;
-  }
-  if (playerHuman) {
-    player2.type = 'Human';
-  } else if (playerBot) {
-    player2.type = 'Bot';
-  }
-  ControlPanel.showPlayerCard([player1, player2]);
-  Gameboard.getGrid();
-});
-
-markerChanger.addEventListener('click', () => {
-  if (player1.mark === 'X') {
-    player1.mark = 'O';
-    player2.mark = 'X';
-  } else {
-    player1.mark = 'X';
-    player2.mark = 'O';
-  }
-  ControlPanel.showPlayerCard([player1, player2]);
-  Gameboard.getGrid();
-});
-
-const ControlPanel = (() => {
-  const getReset = () => {
-    const resetButton = document.createElement('button');
-    resetButton.classList.add('reset');
-    resetButton.textContent = 'Reset score';
-    resetButton.addEventListener('click', () => {
-      player1.count = 0;
-      player2.count = 0;
-      ControlPanel.showPlayerCard([player1, player2]);
-    });
-    settingsButtons.appendChild(resetButton);
-  };
-
-  const showPlayerCard = (players) => {
-    resultsContainer.textContent = '';
-    for (pl of players) {
-      const playerCard = document.createElement('div');
-      if (pl.active) {
-        playerCard.classList.add('player-card', 'active');
-      } else {
-        playerCard.classList.add('player-card');
-      }
-      let playerName = document.createElement('p');
-      playerName.textContent = pl.name;
-      let playerMark = document.createElement('p');
-      playerMark.textContent = `Marker: ${pl.mark}`;
-      let playerPoints = document.createElement('p');
-      playerPoints.textContent = pl.count;
-      playerCard.appendChild(playerName);
-      playerCard.appendChild(playerMark);
-      playerCard.appendChild(playerPoints);
-      resultsContainer.appendChild(playerCard);
+function showPlayerCard() {
+  resultsContainer.textContent = '';
+  for (player of [player1, player2]) {
+    const playerCard = document.createElement('div');
+    if (player.active) {
+      playerCard.classList.add('player-card', 'active');
+    } else {
+      playerCard.classList.add('player-card');
     }
-  };
-
-  return { getReset, showPlayerCard };
-})();
+    const playerName = document.createElement('p');
+    playerName.textContent = player.name;
+    const playerMark = document.createElement('p');
+    playerMark.textContent = `Marker: ${player.mark}`;
+    const playerPoints = document.createElement('p');
+    playerPoints.textContent = player.count;
+    playerCard.appendChild(playerName);
+    playerCard.appendChild(playerMark);
+    playerCard.appendChild(playerPoints);
+    resultsContainer.appendChild(playerCard);
+  }
+}
 
 const Gameboard = (() => {
   const _createCell = (i) => {
@@ -168,7 +120,7 @@ const GameLogic = (() => {
     ) {
       gameOn = false;
       activePlayer.count++;
-      ControlPanel.showPlayerCard([player1, player2]);
+      showPlayerCard();
       _showMessage(`${activePlayer.name} Win!`);
     } else {
       if (emptyCells.length === 0) {
@@ -177,6 +129,7 @@ const GameLogic = (() => {
       }
     }
   };
+
   const changePlayer = () => {
     if (activePlayer === player1) {
       player1.active = false;
@@ -187,7 +140,7 @@ const GameLogic = (() => {
       player1.active = true;
       player2.active = false;
     }
-    ControlPanel.showPlayerCard([player1, player2]);
+    showPlayerCard();
   };
 
   const botTurn = () => {
@@ -207,17 +160,56 @@ const GameLogic = (() => {
       }
     }
   };
+
   return { winCheck, changePlayer, botTurn };
 })();
 
 Gameboard.getGrid();
-ControlPanel.getReset();
-ControlPanel.showPlayerCard([player1, player2]);
+showPlayerCard();
 
 startNewGame.addEventListener('click', () => {
   Gameboard.getGrid();
-  ControlPanel.showPlayerCard([player1, player2]);
+  showPlayerCard();
   gameOn = true;
   document.body.removeChild(document.body.lastChild);
   GameLogic.botTurn();
+});
+
+markerChanger.addEventListener('click', () => {
+  if (player1.mark === 'X') {
+    player1.mark = 'O';
+    player2.mark = 'X';
+  } else {
+    player1.mark = 'X';
+    player2.mark = 'O';
+  }
+  showPlayerCard();
+  Gameboard.getGrid();
+});
+
+resetButton.addEventListener('click', () => {
+  player1.count = 0;
+  player2.count = 0;
+  showPlayerCard();
+});
+
+applyButton.addEventListener('click', stopDefAction, false);
+applyButton.addEventListener('click', () => {
+  const playerOneNameInput = document.querySelector('#player-1').value;
+  const playerTwoNameInput = document.querySelector('#player-2').value;
+  const playerHuman = document.querySelector('#player-human').checked;
+  const playerBot = document.querySelector('#player-bot').checked;
+  if (playerOneNameInput) {
+    player1.name = playerOneNameInput;
+  }
+  if (playerTwoNameInput) {
+    player2.name = playerTwoNameInput;
+  }
+  if (playerHuman) {
+    player2.type = 'Human';
+  } else if (playerBot) {
+    player2.type = 'Bot';
+  }
+  showPlayerCard();
+  Gameboard.getGrid();
 });
